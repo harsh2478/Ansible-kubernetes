@@ -1,0 +1,31 @@
+- name: "Creating a Pod"
+  hosts: all
+  gather_facts: true
+  tasks:
+   - name: "Creating a POD using Ansible"
+     k8s: # k8s module comes from community.kubernetes collections, make sure it is installed 
+       api_version: v1
+       definition: # defining the entire kubernetes manifest file using k8s module of ansible
+        kind: Pod
+        metadata:
+         name: "my-1st-pod"
+         namespace: default # you can customize this namespace  
+        spec:
+         containers:
+          - name: "my-web-container"
+            image: "vimal13/apache-webserver-php" # image name to be used by container inside the pod
+            ports:
+              - containerPort: 80
+       kubeconfig: "/home/newUser/.kube/config" #mention the path of your config file in the minikube server
+     vars:
+        ansible_python_interpreter: "/usr/bin/python3" # mentioning the exact path for python interpretor as kubernetes needs python interpretor 
+
+   - name: "check the status of POD"
+     command: "kubectl get pods --kubeconfig=/home/newUser/.kube/config" # mentioning exact path for config file for the reference of kubectl 
+     register: pod
+     ignore_errors: true
+
+   - name: "print the POD status"
+     debug: # printing the status of pod launched with debug module
+       var: pod 
+
