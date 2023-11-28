@@ -1,5 +1,5 @@
 - name: "Creating a Pod"
-  hosts: all
+  hosts: all # hostname or IP of the server where minikube is running
   gather_facts: true
   tasks:
    - name: "Creating a POD using Ansible"
